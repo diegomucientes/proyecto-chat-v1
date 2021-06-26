@@ -12,7 +12,9 @@ const SOCKET_SERVER_URL = "http://localhost:7000";
 const ChatUser = (room) => {
   const socketRef = useRef();
   const [user, setUser] = useState();
-
+  const [users, setUsers] = useState([]);
+  const [messages, setMessages] = useState([]);
+  
   // Usuario Conectado
   useEffect(() => {
     const fetchUser = async () => {
@@ -42,21 +44,25 @@ const ChatUser = (room) => {
 
     socketRef.current.on(USER_JOIN_CHAT_EVENT, (user) => {
       if (user.id === socketRef.current.id) return;
-      //setUsers((users) => [...users, user]);
+      setUsers((users) => [...users, user]);
     });
 
     socketRef.current.on(USER_LEAVE_CHAT_EVENT, (user) => {
-      //setUsers((users) => users.filter((u) => u.id !== user.id));
+      setUsers((users) => users.filter((u) => u.id !== user.id));
     });
 
-    /*
     socketRef.current.on(NEW_CHAT_MESSAGE_EVENT, (message) => {
-      const incomingMessage = {
+      console.log("message", message);
+
+      /* const incomingMessage = {
         ...message,
         ownedByCurrentUser: message.senderId === socketRef.current.id,
       };
-      setMessages((messages) => [...messages, incomingMessage]);
+      setMessages((messages) => [...messages, incomingMessage]); */
     });
+
+    /*
+    
 
     socketRef.current.on(START_TYPING_MESSAGE_EVENT, (typingInfo) => {
       if (typingInfo.senderId !== socketRef.current.id) {

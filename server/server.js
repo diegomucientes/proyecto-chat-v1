@@ -40,38 +40,22 @@ io.on('connection',(socket)=>{
     socket.join(room);
 
     const user = addUser(socket.id, room, name, picture);
-    console.log("user ->", user);
+    //console.log("user ->", user);
     io.in(room).emit(USER_JOIN_CHAT_EVENT, user);
 
-    /*
-    socket.on('join',({name,room},callback)=>{
-        if (!room) room = "global";
+    // Listen for new messages
+    socket.on(NEW_CHAT_MESSAGE_EVENT, (data) => {
+        const message = addMessage(room, data);
+        io.in(room).emit(NEW_CHAT_MESSAGE_EVENT, message);
+    });
 
-        console.log(name,room);
-        const {error,user}=addUser({id:socket.id,name,room});
-
-        if (error) return callback(error);
-
-        socket.emit('message',{user:'admin',text:`${user.name}, welcome to the room ${user.room}`});
-
-        socket.broadcast.to(user.room).emit('message',{user:'admin',text:`${user.name}, has joined`});
-        socket.join(user.room);
+    // Leave the room if the user closes the socket
+    socket.on("disconnect", () => {
+        removeUser(socket.id);
+        io.in(room).emit(USER_LEAVE_CHAT_EVENT, user);
+        socket.leave(room);
+    });
     
-        callback();
-    });
-
-    socket.on('sendMessage', (message,callback)=>{
-        const user = getUser(socket.id);
-
-        io.to(user.room).emit('message',{user:user.name, text: message});
-        callback();
-
-    })
-
-    socket.on('disconnect',()=>{
-        console.log('User had left');
-    });
-    */
 });
 
 server.listen(PORT,()=>console.log(`Server has started on port ${PORT}`));
