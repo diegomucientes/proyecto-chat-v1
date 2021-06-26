@@ -30,35 +30,37 @@ const Chat = (props) => {
     };
 
     return (
-        <main className="chat-container">
-            <div className="chat-top-bar">
-                <h1 className="room-name">Room: {room}</h1>
-                {user && <Avatar user={user}></Avatar>}
-            </div>
-            {/* <Users users={users}></Users> */}
-            <div className="messages-container">
-                <ol className="messages-list">
-                    {messages.map((message, i) => (
-                        <li key={i}>
-                            <Messages message={message}></Messages>
-                        </li>
-                    ))}
+        <main className="chat-wrapper">
+            <section>
+                <div className="chat-top-bar">
+                    {/* <h1 className="room-name">Room: {room}</h1> */}
+                    {user && <Avatar user={user}></Avatar>}
+                </div>
+                {/* <Users users={users}></Users> */}
+                <div className="messages-container">
+                    <ol className="messages-list">
+                        {messages.map((message, i) => (
+                            <li key={i}>
+                                <Messages message={message}></Messages>
+                            </li>
+                        ))}
 
-                    {/* {typingUsers.map((user, i) => (
+                        {/* {typingUsers.map((user, i) => (
                         <li key={messages.length + i}>
                             <TypingMessage user={user}></TypingMessage>
                         </li>
                     ))} */}
 
-                </ol>
-            </div>
-            <FormSendMessage
-                newMessage={newMessage}
-                handleNewMessageChange={handleNewMessageChange}
-                //handleStartTyping={startTyping}
-                //handleStopTyping={stopTyping}
-                handleSendMessage={handleSendMessage}
-            ></FormSendMessage>
+                    </ol>
+                </div>
+                <FormSendMessage
+                    newMessage={newMessage}
+                    handleNewMessageChange={handleNewMessageChange}
+                    //handleStartTyping={startTyping}
+                    //handleStopTyping={stopTyping}
+                    handleSendMessage={handleSendMessage}
+                ></FormSendMessage>
+            </section>
         </main>
     );
 };
