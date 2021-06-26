@@ -14,7 +14,7 @@ const ChatUser = (room) => {
   const [user, setUser] = useState();
   const [users, setUsers] = useState([]);
   const [messages, setMessages] = useState([]);
-  
+
   // Usuario Conectado
   useEffect(() => {
     const fetchUser = async () => {
@@ -54,16 +54,14 @@ const ChatUser = (room) => {
     socketRef.current.on(NEW_CHAT_MESSAGE_EVENT, (message) => {
       console.log("message", message);
 
-      /* const incomingMessage = {
+      const incomingMessage = {
         ...message,
-        ownedByCurrentUser: message.senderId === socketRef.current.id,
+        currentUser: message.senderId === socketRef.current.id,
       };
-      setMessages((messages) => [...messages, incomingMessage]); */
+      setMessages((messages) => [...messages, incomingMessage]);
     });
 
     /*
-    
-
     socketRef.current.on(START_TYPING_MESSAGE_EVENT, (typingInfo) => {
       if (typingInfo.senderId !== socketRef.current.id) {
         const user = typingInfo.user;
@@ -84,16 +82,27 @@ const ChatUser = (room) => {
     };
   }, [room, user]);
 
+  const sendMessage = (messageBody) => {
+    if (!socketRef.current) return;
+
+    socketRef.current.emit(NEW_CHAT_MESSAGE_EVENT, {
+      body: messageBody,
+      senderId: socketRef.current.id,
+      user: user,
+    });
+  };
+
   return {
     user,
-
-    /* messages,
-    user,
     users,
-    typingUsers,
+    messages,
     sendMessage,
+
+    /* 
+    typingUsers,
     startTypingMessage,
-    stopTypingMessage, */
+    stopTypingMessage,
+    */
   };
 };
 
