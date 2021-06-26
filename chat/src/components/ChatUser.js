@@ -13,8 +13,7 @@ const ChatUser = (room) => {
   const socketRef = useRef();
   const [user, setUser] = useState();
 
-  if (!room) room = "global";
-
+  // Usuario Conectado
   useEffect(() => {
     const fetchUser = async () => {
       const response = await axios.get("https://api.randomuser.me/");
